@@ -59,6 +59,13 @@ pairs' n = concatMap (\i -> map(\j -> [i, j]) (1 .. n)) (1 .. n)
 pairs'' n = concatMap (\i -> map(\j -> [i, j]) (i .. n)) (1 .. n)
 factors n = filter (\pair -> product pair == n) (pairs'' n)
 
+factors' :: Int -> Array (Array Int)
+factors' n = filter (\xs -> product xs == n) $ do
+  i <- 1 .. n
+  j <- i .. n
+  --pure [i, j]
+  [[i, j]]
+
 main :: Effect Unit
 main = do
   log (show (fact 2))
@@ -103,3 +110,4 @@ main = do
   log (show (pairs'' 3))
   log (show (factors 3))
   log (show (factors 10))
+  log (show (factors' 10))
