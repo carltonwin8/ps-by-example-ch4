@@ -7,6 +7,7 @@ import Effect.Console (log)
 import Data.Array (range, null, (..), filter, concat, concatMap)
 import Data.Array.Partial (tail, head)
 import Partial.Unsafe (unsafePartial)
+import Data.Foldable (product)
 
 fact :: Int -> Int
 fact 0 = 1
@@ -52,6 +53,12 @@ incArr arr =  (\n -> n + 1) <$> arr
 
 infix 8 filter as <$?>
 
+pairs :: Int -> Array Int
+pairs n = concatMap (\i -> 1 .. n) (1 .. n)
+pairs' n = concatMap (\i -> map(\j -> [i, j]) (1 .. n)) (1 .. n)
+pairs'' n = concatMap (\i -> map(\j -> [i, j]) (i .. n)) (1 .. n)
+factors n = filter (\pair -> product pair == n) (pairs'' n)
+
 main :: Effect Unit
 main = do
   log (show (fact 2))
@@ -81,9 +88,18 @@ main = do
   log (show (map (\n -> n * n) (1 .. 10)))
   log (show ((<$>) (\n -> n * n) (1 .. 10)))
   log (show ( (\n -> n * n) <$> (1 .. 10)))
+  log ("filter start")
   log (show (filter (\n -> n > -1) (-10 .. 10)))
   log (show ((\n -> n > -1) `filter` (-10 .. 10)))
   log (show ((\n -> n > -1) <$?> (-10 .. 10)))
   log (show ((<$?>) (\n -> n > -1)  (-10 .. 10)))
+  log (show ((\n -> n > -1) <$?> (-10 .. 10)))
+  log ("flatten start")
   log (show (concat [[1,2],[4,5,6], [7]]))
   log (show (concatMap (\n -> [n, n*n]) (1 .. 5)))
+  log ("arr comprehensions")
+  log (show (pairs 3))
+  log (show (pairs' 3))
+  log (show (pairs'' 3))
+  log (show (factors 3))
+  log (show (factors 10))
