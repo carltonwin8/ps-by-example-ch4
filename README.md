@@ -11,6 +11,7 @@ Commands
 - pulp repl
 - bower install purescript-maybe purescript-arrays purescript-strings \
   purescript-foldable-traversable purescript-console --save
+- bower install purescript-control --save
 
 ## Notes
 
